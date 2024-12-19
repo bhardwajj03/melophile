@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/env": "^15.1.2",
+    "dotenv": "^16.4.7",
     "next": "15.0.4",
     "next-auth": "^4.24.11",
     "react": "^19.0.0",
