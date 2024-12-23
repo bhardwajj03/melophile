@@ -24,7 +24,9 @@ model User{
 
 model activeStreams{
   id            String      @id @default(uuid())
-  type          streamType  
+  type          streamType
+   url           String
+  extractedId   String  
   active        Boolean     @default(true)
   userId        String
   user          User        @relation(fields: [userId],references: [id])
@@ -34,8 +36,6 @@ model activeStreams{
 model Upvote{
   id            String          @id @default(uuid())
   userId        String
-  url           String
-  extractedId   String
   streamId      String
   user          User            @relation(fields: [userId],references: [id])         
   stream        activeStreams   @relation(fields: [streamId],references: [id])  

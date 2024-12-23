@@ -2,6 +2,8 @@ import { prismaClient } from "@/app/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
+const YT_REGEX=new RegExp("^https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})$")
+
 const createStreamSchema = z.object({
   creatorId: z.string(),
   url: z
@@ -15,8 +17,24 @@ export async function POST(req: NextRequest) {
   try {
     // Parse and validate the incoming data
     const data = createStreamSchema.parse(await req.json());
-    prismaClient.activeStreams.create({
+    const isYt =YT_REGEX.test(data.url);
+    if(!isYt){
+        return NextResponse.json({
+            message:"Wrong Url input",
+        },{status:411})
+    }
+
+
+
+    const extractedId=data.url.split("?v=")[1];
+
+    await prismaClient.activeStreams.create({
+       data:{
         userId:data.creatorId ,
+        url:data.url,
+        extractedId,
+        type:"Youtube"
+       }
 
     })
 
