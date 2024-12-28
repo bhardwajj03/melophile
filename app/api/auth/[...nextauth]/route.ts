@@ -16,10 +16,13 @@ const handler = NextAuth({
         if(!params.user.email){
           return false;
         }
+      
          try {
           await prismaClient.user.create({
+            
             data:{
               email:params.user.email ??"",
+              
               provider:"Google"
             }
 
