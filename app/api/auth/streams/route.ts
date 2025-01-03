@@ -2,7 +2,14 @@ import { prismaClient } from "@/app/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
-const YT_REGEX=new RegExp("https:\/\/youtu\.be\/([a-zA-Z0-9_-]+)")
+
+import  {youtubesearchapi} from "youtube-search-api"
+
+
+
+const YT_REGEX=new RegExp("https://www.youtube.com/watch?v=irq70KO68Vg")
+//const YT_REGEX = /^https:\/\/www\.youtube\.com\/watch\?v=[a-zA-Z0-9_-]{11}$/;
+
 
 const createStreamSchema = z.object({
   creatorId: z.string(),
@@ -28,12 +35,22 @@ export async function POST(req: NextRequest) {
 
     const extractedId=data.url.split("?v=")[1];
 
+    const res=await youtubesearchapi.GetVideoDetails(extractedId)
+    const thumbnails=res.thumbnail.thumbnails;
+    thumbnails.sort((a:{width:number},b:{width:number}) => a.width < b.width ? -1:1);
+
+
     const stream=await prismaClient.activeStreams.create({
        data:{
         userId:data.creatorId ,
         url:data.url,
         extractedId,
-        type:"Youtube"
+        type:"Youtube",
+        title:res.title ?? "video nhi mil rahi",
+        smallImg:(thumbnails.length>1 ? thumbnails[thumbnails.length -2].url :thumbnails[thumbnails.length -1].url)
+        ?? "https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://fdczvxmwwjwpwbeeqcth.supabase.co/storage/v1/object/public/images/a8bf1a2c-259e-4e95-b2c2-bb995876ed63/a252bcd6-9a10-40be-bf99-1d850d2026e4.png",
+        bigImg:thumbnails[thumbnails.length -1].url 
+        ?? "https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://fdczvxmwwjwpwbeeqcth.supabase.co/storage/v1/object/public/images/a8bf1a2c-259e-4e95-b2c2-bb995876ed63/a252bcd6-9a10-40be-bf99-1d850d2026e4.png"
        }
 
     })
@@ -44,10 +61,10 @@ export async function POST(req: NextRequest) {
     })
 
     // Handle the valid data (e.g., save to the database)
-    return NextResponse.json({
+    /*return NextResponse.json({
       message: "Stream added successfully",
       data,
-    });
+    });*/
   } catch (e) {
     // Handle validation or parsing errors
     if (e instanceof z.ZodError) {
@@ -83,3 +100,6 @@ export async function GET(req:NextRequest){
     streams
   })
 }
+
+
+
