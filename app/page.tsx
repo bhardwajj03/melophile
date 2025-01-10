@@ -2,14 +2,13 @@ import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Music, Users, Radio, Headphones } from 'lucide-react'
+import Appbar from './components/Appbar'
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-col min-h-screen">
-      <header className="px-4 lg:px-6 h-14 flex items-center">
-        
-      </header>
-      <main className="flex-1">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-900 via-purple-600 to-gray-900">
+      <Appbar />
+      <main className="flex-1  py-12 md:py-24 lg:py-32" >
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-black text-white">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center space-y-4 text-center">
@@ -22,8 +21,8 @@ export default function LandingPage() {
                 </p>
               </div>
               <div className="space-x-4">
-                <Button className="bg-white text-black hover:bg-gray-200">Get Started</Button>
-                <Button variant="outline" className="text-white border-white hover:bg-white hover:text-black">Learn More</Button>
+                <Button className="text-white border-white hover:bg-white hover:text-black">Get Started</Button>
+                <Button  className="text-white border-white hover:bg-white hover:text-black">Learn More</Button>
               </div>
             </div>
           </div>

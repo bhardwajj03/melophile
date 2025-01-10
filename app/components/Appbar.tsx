@@ -1,3 +1,5 @@
+"use client"
+
 import { Music } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
