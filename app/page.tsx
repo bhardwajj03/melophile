@@ -3,11 +3,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Music, Users, Radio, Headphones } from 'lucide-react'
 import Appbar from './components/Appbar'
+import Redirect from './components/Redirect'
 
 export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-900 via-purple-600 to-gray-900">
       <Appbar />
+      <Redirect />
       <main className="flex-1  py-12 md:py-24 lg:py-32" >
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-black text-white">
           <div className="container px-4 md:px-6">
