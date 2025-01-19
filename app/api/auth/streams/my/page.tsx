@@ -6,8 +6,26 @@ export async function GET(req:NextRequest){
     const session= await getServerSession() ;
     
     const user=await prismaClient.user.findFirst({
-        
-    })
+        where:{
+            email:session?.user?.email ?? ""
+        }
+    });
+
+    if (!user){
+        return NextResponse.json({
+            message:"Unauthenticated"
+        },{status:403})
+    }
+
+    const streams= await prismaClient.activeStreams.findMany({
+        where:{
+          userId:user.id ?? ""
+        }
+      })
+    
+      return NextResponse.json({
+        streams
+      })
         
     
 }
