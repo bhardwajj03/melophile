@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { ThumbsUp, ThumbsDown, Share2 } from 'lucide-react'
 import Image from "next/image"
 import YouTube from 'react-youtube'
+import axios from "axios";
 
 interface Video {
   id: string;
@@ -15,6 +16,8 @@ interface Video {
   downvotes: number;
   thumbnail: string;
 }
+
+const REFRESH_INTERVAL_MS=10*1000;
 
 export default function Component() {
   const [inputLink, setInputLink] = useState('')
@@ -26,7 +29,38 @@ export default function Component() {
   const [currentVideo, setCurrentVideo] = useState<Video | null>(null)
   const [previewVideo, setPreviewVideo] = useState<Video | null>(null)
 
+/* function refreshStreams(){
+    const res=axios.get(`api/streams/my`);
+    console.log(res)
+  }*/
+    function refreshStreams() {
+      axios
+        .get(`api/streams/my`, {
+          headers: { "Content-Type": "application/json",
+            Authorization: `Bearer YOUR_TOKEN`, 
+          },
+        })
+        .then((response) => {
+          console.log("Streams data:", response.data);
+          // Process the response data if needed
+        })
+        .catch((error) => {
+          if (error.response) {
+            // Server responded with a status outside the 2xx range
+            console.log("Error response:", error.response);
+          } else if (error.request) {
+            // Request was made but no response received
+            console.log("No response received:", error.request);
+          } else {
+            // Something else caused the error
+            console.log("Error setting up request:", error.message);
+          }
+        });
+    }
+    
+
   useEffect(() => {
+    refreshStreams();
     if (!currentVideo && queue.length > 0) {
       setCurrentVideo(queue[0])
       setQueue(prev => prev.slice(1))
