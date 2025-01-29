@@ -1,0 +1,1 @@
+export const YT_REGEX = /^https:\/\/www\.youtube\.com\/watch\?v=[a-zA-Z0-9_-]{11}$/;

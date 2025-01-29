@@ -8,8 +8,15 @@ import { ThumbsUp, ThumbsDown, Share2,Play } from 'lucide-react'
 import Image from "next/image"
 import YouTube from 'react-youtube'
 
-import toast, { ToastContainer } from "react-toastify"
+import { toast, ToastContainer } from "react-toastify"; 
+import "react-toastify/dist/ReactToastify.css";
+
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
+import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
+
 import Appbar from '../components/Appbar'
+import { z } from 'zod'
+import { YT_REGEX } from "@/app/lib/utils";
 
 
 
@@ -35,7 +42,7 @@ export default function Component() {
   const [inputLink, setInputLink] = useState('')
   const [queue, setQueue] = useState<Video[]>([])
   const [currentVideo, setCurrentVideo] = useState<Video | null>(null)
-  const [loading,setLoading]=useState(false)
+
 
  async function refreshStreams(){
     const res=await fetch(`/api/streams/my`,{credentials:"include"});
@@ -68,19 +75,19 @@ export default function Component() {
     }*/
     
 
-        useEffect(() => {
-          refreshStreams(); // Initial fetch
-          const interval = setInterval(() => {
-            refreshStreams();
-          }, REFRESH_INTERVAL_MS);
+useEffect(() => {
+    refreshStreams(); // Initial fetch
+    const interval = setInterval(() => {
+      refreshStreams();
+    }, REFRESH_INTERVAL_MS);
       
-          return () => clearInterval(interval); // Cleanup on unmount
-        }, []);
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
 
   const handleSubmit=async (e:React.FormEvent)=>{
     e.preventDefault();
     
-    const res=await fetch(`/api/streams/my`,{
+    const res=await fetch("/api/streams/my",{
       method:"POST",
       body:JSON.stringify({
         creatorId:"bae97c61-d9cb-46e9-bfec-d8a7ce9c6f88",
@@ -167,18 +174,22 @@ export default function Component() {
               onChange={(e)=>setInputLink(e.target.value)}
               className="bg-gray-900 text-white border-gray-700 placeholder-gray-500" 
           />
-          <Button type='submit' className="w-full bg-purple-700 hover:bg-purple-800 text-white">Add to Queue</Button>
+          <Button onClick={()=>{
+            fetch("/api/streams",{
+              method:"POST",
+              body:JSON.stringify({
+                creatorId: "creatorID",
+                  url: z.string()
+              })
+            })
+          }}
+          type='submit' className="w-full bg-purple-700 hover:bg-purple-800 text-white">Add to Queue</Button>
         </form>
 
-        {inputLink && (
+        {inputLink && inputLink.match(YT_REGEX) && (
           <Card className="bg-gray-900 border-gray-800">
             <CardContent className="p-4">
-              <Image
-                  src='/placeholder.svg?height=200&width=320'
-                  alt='Video preview'
-                  className="w-full h-48 object-cover rounded"
-              />
-              <p className="mt-2 text-center text-gray-400">Video Preview</p>
+              <LiteYouTubeEmbed id={inputLink.split("?v=")[1]} title=''/>
             </CardContent>
           </Card>
         )}

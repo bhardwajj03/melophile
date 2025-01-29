@@ -4,11 +4,12 @@ import { z } from "zod";
 
 //@ts-ignore
 import  {youtubesearchapi} from "youtube-search-api"
+import { YT_REGEX } from "@/app/lib/utils";
 
 
 
-const YT_REGEX=new RegExp("https://www.youtube.com/watch?v=irq70KO68Vg")
-//const YT_REGEX = /^https:\/\/www\.youtube\.com\/watch\?v=[a-zA-Z0-9_-]{11}$/;
+//export const YT_REGEX=new RegExp("https://www.youtube.com/watch?v=irq70KO68Vg")
+
 
 
 const createStreamSchema = z.object({
@@ -56,8 +57,9 @@ export async function POST(req: NextRequest) {
     })
 
     return NextResponse.json({
-      message:"Added stream",
-      id:stream.id
+      ...stream,
+      hasUpvoted:false,
+      upvotes:0
     })
 
     // Handle the valid data (e.g., save to the database)
