@@ -2,7 +2,7 @@ import { prismaClient } from "@/app/lib/db";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(_req:NextRequest){
+export async function GET(req:NextRequest){
     const session= await getServerSession() ;
     
     const user=await prismaClient.user.findFirst({
@@ -26,6 +26,11 @@ export async function GET(_req:NextRequest){
             select:{
               upvotes:true
             }
+          },
+          upvotes:{
+            where:{
+              userId:user.id
+            }
           }
         }
       })
@@ -33,7 +38,8 @@ export async function GET(_req:NextRequest){
       return NextResponse.json({
         streams:streams.map(({_count,...rest})=>({
           ...rest,
-          upvotes:_count.upvotes
+          upvotes:_count.upvotes,
+          haveUpvoted:rest.upvotes.length ? true :false
         }))
       })
         

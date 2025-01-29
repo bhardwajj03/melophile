@@ -35,6 +35,11 @@ export async function POST(req:NextRequest){
                 }
             }
         }) ;
+
+        return NextResponse.json({
+          message:"Done!"
+        })
+        
         }catch (e) {
             // Handle validation or parsing errors
             if (e instanceof z.ZodError) {
