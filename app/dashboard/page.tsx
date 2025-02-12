@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ThumbsUp, ThumbsDown, Share2,Play } from 'lucide-react'
 import Image from "next/image"
-import YouTube from 'react-youtube'
 
 import { toast, ToastContainer } from "react-toastify"; 
 import "react-toastify/dist/ReactToastify.css";
@@ -15,7 +14,7 @@ import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 
 import Appbar from '../components/Appbar'
-import { z } from 'zod'
+
 import { YT_REGEX } from "@/app/lib/utils";
 
 
@@ -38,10 +37,14 @@ interface Video {
 
 const REFRESH_INTERVAL_MS=10*1000;
 
+const creatorId="bae97c61-d9cb-46e9-bfec-d8a7ce9c6f88";
+
+
 export default function Component() {
   const [inputLink, setInputLink] = useState('')
   const [queue, setQueue] = useState<Video[]>([])
   const [currentVideo, setCurrentVideo] = useState<Video | null>(null)
+  const [loading,setLoading]=useState(false);
 
 
  async function refreshStreams(){
@@ -86,15 +89,16 @@ useEffect(() => {
 
   const handleSubmit=async (e:React.FormEvent)=>{
     e.preventDefault();
-    
+    setLoading(true)
     const res=await fetch("/api/streams/my",{
       method:"POST",
       body:JSON.stringify({
-        creatorId:"bae97c61-d9cb-46e9-bfec-d8a7ce9c6f88",
+        creatorId,
         url:inputLink
       })
     });
     setQueue([...queue,await res.json()])
+    setLoading(false);
     setInputLink('')
   }
 
@@ -126,7 +130,7 @@ useEffect(() => {
  
 
   const handleShare = () => {
-    const shareableLink = window.location.href;
+    const shareableLink = `${window.location.hostname}/creator/${creatorId}`
   
     navigator.clipboard
       .writeText(shareableLink)
@@ -174,19 +178,11 @@ useEffect(() => {
               onChange={(e)=>setInputLink(e.target.value)}
               className="bg-gray-900 text-white border-gray-700 placeholder-gray-500" 
           />
-          <Button onClick={()=>{
-            fetch("/api/streams",{
-              method:"POST",
-              body:JSON.stringify({
-                creatorId: "creatorID",
-                  url: z.string()
-              })
-            })
-          }}
-          type='submit' className="w-full bg-purple-700 hover:bg-purple-800 text-white">Add to Queue</Button>
+          <Button disabled={loading} onClick={handleSubmit}
+          type='submit' className="w-full bg-purple-700 hover:bg-purple-800 text-white">{loading ? "Loading...": "Add to Queue"}</Button>
         </form>
 
-        {inputLink && inputLink.match(YT_REGEX) && (
+        {inputLink && inputLink.match(YT_REGEX) && !loading &&(
           <Card className="bg-gray-900 border-gray-800">
             <CardContent className="p-4">
               <LiteYouTubeEmbed id={inputLink.split("?v=")[1]} title=''/>
@@ -256,3 +252,7 @@ useEffect(() => {
   )
 }
 
+
+
+
+//2:53:00
