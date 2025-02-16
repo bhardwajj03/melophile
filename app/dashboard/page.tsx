@@ -1,5 +1,6 @@
 "use client"
 
+import type React from 'react'
 import { useState, useEffect } from 'react'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -35,9 +36,9 @@ interface Video {
 }
 
 
-const REFRESH_INTERVAL_MS=10*1000;
+const REFRESH_INTERVAL_MS=10*1000;   // refresh the queue after every 10 seconds
 
-const creatorId="bae97c61-d9cb-46e9-bfec-d8a7ce9c6f88";
+const creatorId="bae97c61-d9cb-46e9-bfec-d8a7ce9c6f88";  //hard-coded creator id
 
 
 export default function Component() {
