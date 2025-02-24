@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Music, Users, Radio, Headphones } from 'lucide-react'
+import {  Users, Radio, Headphones } from 'lucide-react'
 import Appbar from './components/Appbar'
 import Redirect from './components/Redirect'
 
@@ -19,7 +19,7 @@ export default function LandingPage() {
                   Let Your Fans Choose the Soundtrack to Your Stream
                 </h1>
                 <p className="mx-auto max-w-[700px] text-gray-300 md:text-xl">
-                  FanTune revolutionizes music streaming by putting the power in your fans' hands. Create unforgettable streams with music chosen by your audience.
+                  FanTune revolutionizes music streaming by putting the power in your fans hands. Create unforgettable streams with music chosen by your audience.
                 </p>
               </div>
               <div className="space-x-4">
@@ -48,7 +48,7 @@ export default function LandingPage() {
               <div className="flex flex-col items-center text-center">
                 <Headphones className="h-12 w-12 mb-4 text-blue-600" />
                 <h3 className="text-xl font-bold mb-2">Discover New Music</h3>
-                <p className="text-gray-600">Explore new tracks and artists through your fans' selections.</p>
+                <p className="text-gray-600">Explore new tracks and artists through your fans selections.</p>
               </div>
             </div>
           </div>
@@ -77,7 +77,7 @@ export default function LandingPage() {
                 <h3 className="text-2xl font-bold">For Fans</h3>
                 <ul className="space-y-2">
                   <li className="flex items-center">
-                    <span className="mr-2 text-blue-600">1.</span> Visit your favorite creator's FanTune link
+                    <span className="mr-2 text-blue-600">1.</span> Visit your favorite creators FanTune link
                   </li>
                   <li className="flex items-center">
                     <span className="mr-2 text-blue-600">2.</span> Browse and vote for songs in the music queue
